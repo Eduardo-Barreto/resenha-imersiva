@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle 3D com Celular</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="ui-layer">
+        <h1>O que sou eu?</h1>
+        <button class="btn" onclick="app.startAsHost()">🖥️ Sou o PC (Tela 3D)</button>
+        <button class="btn btn-secondary" onclick="app.showConnectMenu()">📱 Sou o Controle (Celular)</button>
+
+        <div id="connect-menu" style="display:none; margin-top: 20px; text-align: center;">
+            <p>Digite o ID mostrado na tela do PC:</p>
+            <input type="text" id="remote-id-input" placeholder="Ex: ABC12"><br><br>
+            <button class="btn" onclick="app.connectToHost()">Conectar</button>
+            <button class="btn btn-neutral" onclick="location.reload()">Voltar</button>
+        </div>
+
+        <div id="id-display" style="display:none; margin-top: 20px; text-align: center;">
+            <p style="color: #aaa;">Abra este site no celular e conecte-se com o ID:</p>
+            <h2 id="my-peer-id" style="color: #4CAF50; font-size: 32px; letter-spacing: 2px; background: #222; padding: 10px; border-radius: 5px; user-select: all; cursor: pointer;">
+                Gerando ID...
+            </h2>
+            <p style="font-size: 12px; color: #888;">(Clique no ID para copiar)</p>
+        </div>
+    </div>
+
+    <div id="status-bar">Status: Aguardando escolha...</div>
+
+    <div id="debug-panel">
+        <h3>📊 Debug - Orientação</h3>
+        <div class="value">Alpha (Z): <span id="debug-alpha">0</span>°</div>
+        <div class="value">Beta (X): <span id="debug-beta">0</span>°</div>
+        <div class="value">Gamma (Y): <span id="debug-gamma">0</span>°</div>
+        <hr style="border-color: #555; margin: 10px 0;">
+        <label style="color: #aaa;">Modo de Mapeamento:</label>
+        <select id="mapping-mode" onchange="app.changeMappingMode()">
+            <option value="standard" selected>Padrão (Three.js DeviceOrientation)</option>
+            <option value="portrait">Retrato</option>
+            <option value="landscape">Paisagem</option>
+            <option value="direct">Direto (XYZ)</option>
+            <option value="direct-swapped">Direto (YXZ) - X/Y trocados</option>
+            <option value="inverted">Invertido</option>
+        </select>
+    </div>
+
+    <div id="mobile-controls">
+        <div class="phone-icon">
+            <div class="phone-screen" id="virtual-screen"></div>
+        </div>
+        <h2>Gire seu celular!</h2>
+        <p id="mobile-status">Aguardando sensores...</p>
+        <button class="btn" onclick="app.requestSensorPermission()">Ativar Sensores (iOS)</button>
+        <div class="sensor-data" id="sensor-debug">X: 0 | Y: 0 | Z: 0</div>
+        <div class="sensor-data" style="color: #888; font-size: 12px; margin-top: 10px;">
+            Abra o console para ver logs detalhados
+        </div>
+    </div>
+
+    <script type="module" src="js/app.js"></script>
+</body>
+</html>
