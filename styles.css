@@ -1,9 +1,14 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     overflow: hidden;
-    font-family: 'Segoe UI', sans-serif;
-    background: #111;
-    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: #000;
+    color: #f5f5f7;
+    -webkit-font-smoothing: antialiased;
 }
 
 #ui-layer {
@@ -16,9 +21,22 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.85);
+    background: #000;
     z-index: 10;
     transition: opacity 0.5s;
+}
+
+#initial-choice {
+    text-align: center;
+    max-width: 420px;
+}
+
+#initial-choice h1 {
+    margin: 0 0 60px 0;
+    font-size: 48px;
+    font-weight: 600;
+    color: #f5f5f7;
+    letter-spacing: -0.5px;
 }
 
 .hidden {
@@ -27,85 +45,132 @@ body {
 }
 
 .btn {
-    padding: 15px 30px;
-    margin: 10px;
-    font-size: 18px;
+    display: block;
+    width: 100%;
+    padding: 16px 24px;
+    margin: 12px 0;
+    font-size: 17px;
+    font-weight: 400;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
-    background: #4CAF50;
-    color: white;
-    transition: 0.2s;
-    width: 250px;
-    text-align: center;
+    background: #f5f5f7;
+    color: #1d1d1f;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
 }
 
 .btn:hover {
-    transform: scale(1.05);
-    background: #45a049;
+    background: #e8e8ed;
+    transform: scale(1.01);
+}
+
+.btn:active {
+    transform: scale(0.99);
 }
 
 .btn-secondary {
-    background: #2196F3;
+    background: transparent;
+    color: #f5f5f7;
+    border: 1px solid rgba(245, 245, 247, 0.2);
+}
+
+.btn-secondary:hover {
+    background: rgba(245, 245, 247, 0.1);
+    border-color: rgba(245, 245, 247, 0.3);
 }
 
 .btn-neutral {
-    background: #666;
+    background: transparent;
+    color: rgba(245, 245, 247, 0.6);
+    border: 1px solid rgba(245, 245, 247, 0.1);
+}
+
+.btn-neutral:hover {
+    background: rgba(245, 245, 247, 0.05);
+    color: #f5f5f7;
 }
 
 input {
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    width: 200px;
+    display: block;
+    width: 100%;
+    padding: 16px 20px;
+    margin: 24px 0;
+    border-radius: 12px;
+    border: 1px solid rgba(245, 245, 247, 0.2);
+    background: rgba(245, 245, 247, 0.05);
+    font-size: 24px;
     text-align: center;
+    color: #f5f5f7;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+    font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+}
+
+input::placeholder {
+    color: rgba(245, 245, 247, 0.3);
+}
+
+input:focus {
+    outline: none;
+    border-color: rgba(245, 245, 247, 0.4);
+    background: rgba(245, 245, 247, 0.08);
 }
 
 #status-bar {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 20px;
+    left: 20px;
     z-index: 5;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-family: monospace;
+    background: rgba(29, 29, 31, 0.8);
+    backdrop-filter: blur(20px);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: 'SF Mono', monospace;
+    font-size: 13px;
+    color: rgba(245, 245, 247, 0.6);
 }
 
 #debug-panel {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 20px;
+    right: 20px;
     z-index: 5;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 15px;
-    border-radius: 8px;
-    font-family: monospace;
-    font-size: 12px;
+    background: rgba(29, 29, 31, 0.8);
+    backdrop-filter: blur(20px);
+    padding: 20px;
+    border-radius: 16px;
+    font-family: 'SF Mono', monospace;
+    font-size: 13px;
     display: none;
-    min-width: 250px;
+    min-width: 220px;
 }
 
 #debug-panel h3 {
-    margin: 0 0 10px 0;
-    font-size: 14px;
-    color: #4CAF50;
+    margin: 0 0 16px 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #f5f5f7;
 }
 
 #debug-panel .value {
-    color: #0f0;
-    margin: 5px 0;
+    color: rgba(245, 245, 247, 0.6);
+    margin: 8px 0;
+    font-size: 12px;
 }
 
 #debug-panel select {
     width: 100%;
-    padding: 5px;
-    margin: 10px 0;
-    background: #222;
-    color: white;
-    border: 1px solid #555;
-    border-radius: 4px;
+    padding: 8px 12px;
+    margin: 16px 0 0 0;
+    background: rgba(245, 245, 247, 0.1);
+    color: #f5f5f7;
+    border: 1px solid rgba(245, 245, 247, 0.2);
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: inherit;
 }
 
 #mobile-controls {
@@ -114,33 +179,81 @@ input {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background: #222;
+    background: #000;
 }
 
 .sensor-data {
     margin-top: 20px;
-    font-family: monospace;
-    color: #0f0;
+    font-family: 'SF Mono', monospace;
+    color: rgba(245, 245, 247, 0.6);
+    font-size: 14px;
 }
 
 .phone-icon {
     width: 100px;
     height: 180px;
-    border: 4px solid #555;
-    border-radius: 15px;
+    border: 2px solid rgba(245, 245, 247, 0.2);
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 32px;
     position: relative;
-    background: #333;
+    background: rgba(245, 245, 247, 0.02);
 }
 
 .phone-screen {
     width: 80%;
     height: 85%;
-    background: #4CAF50;
-    border-radius: 5px;
-    opacity: 0.5;
+    background: rgba(245, 245, 247, 0.1);
+    border-radius: 12px;
     transition: 0.1s;
+}
+
+#host-view, #join-room, #mobile-connecting {
+    max-width: 420px;
+    text-align: center;
+}
+
+#host-view h2, #join-room h2, #mobile-connecting h2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: #f5f5f7;
+    margin: 0 0 32px 0;
+    letter-spacing: -0.3px;
+}
+
+#qrcode {
+    margin: 32px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 16px;
+    display: inline-block;
+}
+
+#my-peer-id {
+    color: #f5f5f7;
+    font-size: 36px;
+    letter-spacing: 8px;
+    background: rgba(245, 245, 247, 0.05);
+    padding: 20px 32px;
+    border-radius: 12px;
+    user-select: all;
+    cursor: pointer;
+    margin: 24px 0;
+    font-weight: 600;
+    border: 1px solid rgba(245, 245, 247, 0.1);
+    transition: all 0.2s;
+    font-family: 'SF Mono', monospace;
+}
+
+#my-peer-id:hover {
+    background: rgba(245, 245, 247, 0.08);
+    border-color: rgba(245, 245, 247, 0.2);
+}
+
+#host-view p, #join-room p, #mobile-connecting p {
+    color: rgba(245, 245, 247, 0.6);
+    font-size: 14px;
+    margin: 16px 0;
 }

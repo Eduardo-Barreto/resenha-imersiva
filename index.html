@@ -7,32 +7,41 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="ui-layer">
-        <h1>O que sou eu?</h1>
-        <button class="btn" onclick="app.startAsHost()">🖥️ Sou o PC (Tela 3D)</button>
-        <button class="btn btn-secondary" onclick="app.showConnectMenu()">📱 Sou o Controle (Celular)</button>
-
-        <div id="connect-menu" style="display:none; margin-top: 20px; text-align: center;">
-            <p>Digite o ID mostrado na tela do PC:</p>
-            <input type="text" id="remote-id-input" placeholder="Ex: ABC12"><br><br>
-            <button class="btn" onclick="app.connectToHost()">Conectar</button>
-            <button class="btn btn-neutral" onclick="location.reload()">Voltar</button>
+        <div id="initial-choice">
+            <h1>Controle 3D com Celular</h1>
+            <button class="btn" onclick="app.createRoom()">🖥️ Criar Sala</button>
+            <button class="btn btn-secondary" onclick="app.showJoinRoom()">📱 Entrar em Sala</button>
         </div>
 
-        <div id="id-display" style="display:none; margin-top: 20px; text-align: center;">
-            <p style="color: #aaa;">Abra este site no celular e conecte-se com o ID:</p>
-            <h2 id="my-peer-id" style="color: #4CAF50; font-size: 32px; letter-spacing: 2px; background: #222; padding: 10px; border-radius: 5px; user-select: all; cursor: pointer;">
-                Gerando ID...
-            </h2>
-            <p style="font-size: 12px; color: #888;">(Clique no ID para copiar)</p>
+        <div id="host-view" style="display:none;">
+            <h2>Escaneie com seu celular</h2>
+            <div id="qrcode"></div>
+            <p>Ou acesse com o código</p>
+            <h2 id="my-peer-id">Gerando...</h2>
+            <p style="font-size: 13px; opacity: 0.5;">(Toque para copiar)</p>
+        </div>
+
+        <div id="join-room" style="display:none;">
+            <h2>Digite o código</h2>
+            <input type="text" id="room-id-input" placeholder="ABC12" maxlength="5">
+            <button class="btn" onclick="app.joinRoom()">Conectar</button>
+            <button class="btn btn-neutral" onclick="app.showInitialChoice()">Voltar</button>
+        </div>
+
+        <div id="mobile-connecting" style="display:none;">
+            <h2>Conectando...</h2>
+            <div style="font-size: 72px; margin: 40px 0; opacity: 0.3;">📱</div>
+            <p id="connection-status">Aguardando conexão</p>
         </div>
     </div>
 
-    <div id="status-bar">Status: Aguardando escolha...</div>
+    <div id="status-bar">Status: Inicializando...</div>
 
     <div id="debug-panel">
         <h3>📊 Debug - Orientação</h3>
@@ -57,7 +66,7 @@
         </div>
         <h2>Gire seu celular!</h2>
         <p id="mobile-status">Aguardando sensores...</p>
-        <button class="btn" onclick="app.requestSensorPermission()">Ativar Sensores (iOS)</button>
+        <button class="btn" onclick="app.requestSensorPermission()">Ativar Sensores</button>
         <div class="sensor-data" id="sensor-debug">X: 0 | Y: 0 | Z: 0</div>
         <div class="sensor-data" style="color: #888; font-size: 12px; margin-top: 10px;">
             Abra o console para ver logs detalhados

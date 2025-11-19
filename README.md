@@ -2,6 +2,10 @@
 
 Aplicação web que permite controlar um modelo 3D no PC usando o giroscópio do celular via WebRTC.
 
+## 🌐 Acesso
+
+**[https://eduardo-barreto.github.io/resenha-imersiva/](https://eduardo-barreto.github.io/resenha-imersiva/)**
+
 ## Estrutura do Projeto
 
 ```
@@ -65,13 +69,15 @@ Controller principal exposto globalmente para event handlers HTML.
 
 ## Como usar
 
-1. Abra `index.html` no PC
-2. Clique em "Sou o PC"
-3. Copie o ID gerado
-4. No celular, acesse o mesmo arquivo
-5. Clique em "Sou o Controle"
-6. Digite o ID do PC
-7. Conecte e mova o celular
+1. **Abra no PC**: Acesse a aplicação no desktop - uma sala será criada automaticamente
+2. **QR Code**: Um QR Code será gerado na tela
+3. **Escaneie**: Use seu celular para escanear o QR Code
+4. **Pronto**: O celular conecta automaticamente e você já pode movê-lo
+
+### Detecção Automática
+- Desktop: Cria sala e mostra QR Code
+- Mobile com URL + room ID: Conecta automaticamente
+- Mobile sem room ID: Mostra mensagem de erro
 
 ## Requisitos
 

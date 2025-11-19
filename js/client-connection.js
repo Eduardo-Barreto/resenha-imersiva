@@ -36,7 +36,7 @@ export const ClientConnection = {
         const statusEl = document.getElementById('status-bar');
         statusEl.innerText = 'Status: Conectado!';
 
-        document.getElementById('ui-layer').style.display = 'none';
+        document.getElementById('ui-layer').classList.add('hidden');
         document.getElementById('mobile-controls').style.display = 'flex';
 
         SensorManager.checkAndStart();

@@ -1,25 +1,26 @@
 import { AppState } from './state.js';
 import { Utils } from './utils.js';
 import { Scene3D } from './scene-3d.js';
+import { QRGenerator } from './qr-generator.js';
+import { URLManager } from './url-manager.js';
 
 export const HostConnection = {
-    start() {
+    start(roomId = null) {
         AppState.isHost = true;
         Utils.log('Iniciando como HOST (PC)');
 
         this.setupUI();
         Scene3D.init();
-        this.initializePeer();
+        this.initializePeer(roomId);
     },
 
     setupUI() {
         document.getElementById('ui-layer').querySelector('h1').style.display = 'none';
-        document.querySelectorAll('.btn').forEach(btn => btn.style.display = 'none');
-        document.getElementById('id-display').style.display = 'block';
+        document.getElementById('host-view').style.display = 'block';
     },
 
-    initializePeer() {
-        const myId = Utils.generateShortId();
+    initializePeer(roomId) {
+        const myId = roomId || Utils.generateShortId();
         AppState.peer = new Peer(myId);
 
         AppState.peer.on('open', id => this.onPeerOpen(id));
@@ -36,6 +37,10 @@ export const HostConnection = {
         idEl.innerText = id;
         statusEl.innerText = `Status: PC Pronto. ID: ${id}`;
         idEl.onclick = () => Utils.copyToClipboard(id);
+
+        const roomURL = URLManager.generateRoomURL(id);
+        QRGenerator.generate('qrcode', roomURL);
+        Utils.log(`QR Code gerado para: ${roomURL}`);
     },
 
     onConnection(connection) {

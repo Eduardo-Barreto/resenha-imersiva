@@ -3,28 +3,56 @@ import { Utils } from './utils.js';
 import { HostConnection } from './host-connection.js';
 import { ClientConnection } from './client-connection.js';
 import { SensorManager } from './sensor-manager.js';
+import { URLManager } from './url-manager.js';
 
 const app = {
-    startAsHost() {
+    init() {
+        const roomId = URLManager.getRoomIdFromURL();
+
+        if (roomId) {
+            this.autoConnect(roomId);
+        } else {
+            this.showInitialChoice();
+        }
+    },
+
+    showInitialChoice() {
+        document.getElementById('initial-choice').style.display = 'block';
+        document.getElementById('host-view').style.display = 'none';
+        document.getElementById('join-room').style.display = 'none';
+        document.getElementById('mobile-connecting').style.display = 'none';
+    },
+
+    createRoom() {
+        Utils.log('Criando sala');
+        document.getElementById('initial-choice').style.display = 'none';
         HostConnection.start();
     },
 
-    showConnectMenu() {
-        Utils.log('Mostrando menu de conexão');
-        document.querySelector('h1').innerText = 'Conectar ao PC';
-        document.querySelectorAll('#ui-layer > .btn').forEach(btn => btn.style.display = 'none');
-        document.getElementById('connect-menu').style.display = 'block';
+    showJoinRoom() {
+        Utils.log('Mostrando tela de entrada');
+        document.getElementById('initial-choice').style.display = 'none';
+        document.getElementById('join-room').style.display = 'block';
     },
 
-    connectToHost() {
-        const remoteId = document.getElementById('remote-id-input').value.trim().toUpperCase();
+    joinRoom() {
+        const roomId = document.getElementById('room-id-input').value.trim().toUpperCase();
 
-        if (!remoteId) {
-            alert('Digite o ID!');
+        if (!roomId) {
+            alert('Digite o código da sala!');
             return;
         }
 
-        ClientConnection.start(remoteId);
+        this.autoConnect(roomId);
+    },
+
+    autoConnect(roomId) {
+        Utils.log(`Auto-conectando à sala ${roomId}`);
+        document.getElementById('initial-choice').style.display = 'none';
+        document.getElementById('join-room').style.display = 'none';
+        document.getElementById('mobile-connecting').style.display = 'block';
+
+        ClientConnection.start(roomId);
     },
 
     requestSensorPermission() {
@@ -38,3 +66,4 @@ const app = {
 };
 
 window.app = app;
+app.init();
