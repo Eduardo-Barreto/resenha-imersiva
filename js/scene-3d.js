@@ -1,5 +1,6 @@
 import { AppState } from './state.js';
 import { OrientationMapper } from './orientation-mapper.js';
+import { ModelLoader } from './model-loader.js';
 
 export const Scene3D = {
     init() {
@@ -7,6 +8,7 @@ export const Scene3D = {
         this.createLights();
         this.createCamera();
         this.createRenderer();
+        ModelLoader.init();
         this.createPhoneModel();
         this.animate();
         this.setupResizeHandler();
@@ -14,19 +16,31 @@ export const Scene3D = {
 
     createScene() {
         AppState.scene = new THREE.Scene();
-        AppState.scene.background = new THREE.Color(0x202020);
+        AppState.scene.background = new THREE.Color(0x2a2a2a);
 
-        const gridHelper = new THREE.GridHelper(10, 10);
+        const gridHelper = new THREE.GridHelper(10, 10, 0x555555, 0x333333);
         AppState.scene.add(gridHelper);
     },
 
     createLights() {
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
         AppState.scene.add(ambientLight);
 
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        dirLight.position.set(5, 10, 7);
-        AppState.scene.add(dirLight);
+        const frontLight = new THREE.DirectionalLight(0xffffff, 2.5);
+        frontLight.position.set(0, 5, 5);
+        AppState.scene.add(frontLight);
+
+        const backLight = new THREE.DirectionalLight(0xffffff, 2.5);
+        backLight.position.set(0, 5, -5);
+        AppState.scene.add(backLight);
+
+        const leftLight = new THREE.DirectionalLight(0xffffff, 2.5);
+        leftLight.position.set(-5, 5, 0);
+        AppState.scene.add(leftLight);
+
+        const rightLight = new THREE.DirectionalLight(0xffffff, 2.5);
+        rightLight.position.set(5, 5, 0);
+        AppState.scene.add(rightLight);
     },
 
     createCamera() {
@@ -46,17 +60,24 @@ export const Scene3D = {
     },
 
     createPhoneModel() {
-        const geometry = new THREE.BoxGeometry(1.5, 0.3, 3);
-        const materials = [
-            new THREE.MeshStandardMaterial({ color: 0x333333 }),
-            new THREE.MeshStandardMaterial({ color: 0x333333 }),
-            new THREE.MeshStandardMaterial({ color: 0x2196F3 }),
-            new THREE.MeshStandardMaterial({ color: 0x333333 }),
-            new THREE.MeshStandardMaterial({ color: 0x333333 }),
-            new THREE.MeshStandardMaterial({ color: 0x111111 }),
-        ];
+        AppState.cube = ModelLoader.createDefaultModel();
+        AppState.scene.add(AppState.cube);
+    },
 
-        AppState.cube = new THREE.Mesh(geometry, materials);
+    replaceModel(newModel) {
+        if (AppState.cube) {
+            AppState.scene.remove(AppState.cube);
+            if (AppState.cube.geometry) AppState.cube.geometry.dispose();
+            if (AppState.cube.material) {
+                if (Array.isArray(AppState.cube.material)) {
+                    AppState.cube.material.forEach(m => m.dispose());
+                } else {
+                    AppState.cube.material.dispose();
+                }
+            }
+        }
+
+        AppState.cube = newModel;
         AppState.scene.add(AppState.cube);
     },
 

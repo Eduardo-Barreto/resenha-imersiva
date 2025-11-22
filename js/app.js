@@ -4,6 +4,8 @@ import { HostConnection } from './host-connection.js';
 import { ClientConnection } from './client-connection.js';
 import { SensorManager } from './sensor-manager.js';
 import { URLManager } from './url-manager.js';
+import { ModelLoader } from './model-loader.js';
+import { Scene3D } from './scene-3d.js';
 
 const app = {
     init() {
@@ -62,6 +64,33 @@ const app = {
     changeMappingMode() {
         AppState.currentMapping = document.getElementById('mapping-mode').value;
         Utils.log(`Modo de mapeamento alterado para: ${AppState.currentMapping}`);
+    },
+
+    uploadModel() {
+        const input = document.getElementById('model-upload');
+        input.click();
+
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            ModelLoader.loadFromFile(
+                file,
+                (model) => {
+                    Scene3D.replaceModel(model);
+                    Utils.log('Modelo substituído com sucesso');
+                },
+                (error) => {
+                    alert('Erro ao carregar modelo: ' + error);
+                }
+            );
+        };
+    },
+
+    resetModel() {
+        const defaultModel = ModelLoader.createDefaultModel();
+        Scene3D.replaceModel(defaultModel);
+        Utils.log('Modelo restaurado para padrão');
     }
 };
 

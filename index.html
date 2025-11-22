@@ -6,6 +6,7 @@
     <title>Controle 3D com Celular</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
@@ -44,20 +45,29 @@
     <div id="status-bar">Status: Inicializando...</div>
 
     <div id="debug-panel">
-        <h3>📊 Debug - Orientação</h3>
-        <div class="value">Alpha (Z): <span id="debug-alpha">0</span>°</div>
-        <div class="value">Beta (X): <span id="debug-beta">0</span>°</div>
-        <div class="value">Gamma (Y): <span id="debug-gamma">0</span>°</div>
-        <hr style="border-color: #555; margin: 10px 0;">
-        <label style="color: #aaa;">Modo de Mapeamento:</label>
+        <h3>📊 Debug</h3>
+        <div class="value">Alpha: <span id="debug-alpha">0</span>°</div>
+        <div class="value">Beta: <span id="debug-beta">0</span>°</div>
+        <div class="value">Gamma: <span id="debug-gamma">0</span>°</div>
+        <hr style="border-color: rgba(245, 245, 247, 0.1); margin: 16px 0;">
+        <label style="color: rgba(245, 245, 247, 0.6); font-size: 12px;">Mapeamento</label>
         <select id="mapping-mode" onchange="app.changeMappingMode()">
-            <option value="standard" selected>Padrão (Three.js DeviceOrientation)</option>
+            <option value="standard" selected>Padrão</option>
             <option value="portrait">Retrato</option>
             <option value="landscape">Paisagem</option>
-            <option value="direct">Direto (XYZ)</option>
-            <option value="direct-swapped">Direto (YXZ) - X/Y trocados</option>
+            <option value="direct">Direto</option>
+            <option value="direct-swapped">Swapped</option>
             <option value="inverted">Invertido</option>
         </select>
+        <hr style="border-color: rgba(245, 245, 247, 0.1); margin: 16px 0;">
+        <label style="color: rgba(245, 245, 247, 0.6); font-size: 12px;">Modelo 3D</label>
+        <input type="file" id="model-upload" accept=".glb,.gltf" style="display: none;">
+        <button onclick="app.uploadModel()" style="width: 100%; padding: 10px; margin: 8px 0; background: rgba(245, 245, 247, 0.1); color: #f5f5f7; border: 1px solid rgba(245, 245, 247, 0.2); border-radius: 8px; cursor: pointer; font-size: 12px; font-family: inherit;">
+            📤 Upload
+        </button>
+        <button onclick="app.resetModel()" style="width: 100%; padding: 10px; margin: 8px 0; background: transparent; color: rgba(245, 245, 247, 0.6); border: 1px solid rgba(245, 245, 247, 0.1); border-radius: 8px; cursor: pointer; font-size: 12px; font-family: inherit;">
+            🔄 Restaurar
+        </button>
     </div>
 
     <div id="mobile-controls">
