@@ -3,6 +3,9 @@ import { Utils } from './utils.js';
 import { Scene3D } from './scene-3d.js';
 import { QRGenerator } from './qr-generator.js';
 import { URLManager } from './url-manager.js';
+import { SpaceScene } from './space-scene.js';
+import { HeadAsteroidsScene } from './head-asteroids-scene.js';
+import { HeadTracker } from './head-tracker.js';
 
 export const HostConnection = {
     start(roomId = null) {
@@ -41,6 +44,11 @@ export const HostConnection = {
         const roomURL = URLManager.generateRoomURL(id);
         QRGenerator.generate('qrcode', roomURL);
         Utils.log(`QR Code gerado para: ${roomURL}`);
+
+        // Solicita permissão de câmera antecipadamente para o modo head-tracking
+        HeadTracker.primeCamera()
+            .then(() => Utils.log('Câmera pronta para head-tracking'))
+            .catch(err => Utils.log('Câmera não autorizada/indisponível para head-tracking', err));
     },
 
     onConnection(connection) {
@@ -62,6 +70,10 @@ export const HostConnection = {
         statusEl.style.color = '#4CAF50';
         document.getElementById('ui-layer').classList.add('hidden');
         document.getElementById('debug-panel').style.display = 'block';
+        const spaceBtn = document.getElementById('space-entry');
+        if (spaceBtn) spaceBtn.style.display = 'flex';
+        const headBtn = document.getElementById('head-entry');
+        if (headBtn) headBtn.style.display = 'flex';
     },
 
     onDataReceived(data) {
@@ -88,6 +100,7 @@ export const HostConnection = {
         const gamma = data.gamma * (Math.PI / 180);
 
         Scene3D.updateRotation(alpha, beta, gamma);
+        SpaceScene.onOrientation(data);
     },
 
     onConnectionError(err) {
@@ -100,6 +113,12 @@ export const HostConnection = {
         statusEl.innerText = 'Status: Celular Desconectado.';
         statusEl.style.color = 'white';
         document.getElementById('ui-layer').classList.remove('hidden');
+        const spaceBtn = document.getElementById('space-entry');
+        if (spaceBtn) spaceBtn.style.display = 'none';
+        const headBtn = document.getElementById('head-entry');
+        if (headBtn) headBtn.style.display = 'none';
+        SpaceScene.stop();
+        HeadAsteroidsScene.stop();
     },
 
     onError(err) {

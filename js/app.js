@@ -6,6 +6,9 @@ import { SensorManager } from './sensor-manager.js';
 import { URLManager } from './url-manager.js';
 import { ModelLoader } from './model-loader.js';
 import { Scene3D } from './scene-3d.js';
+import { SpaceScene } from './space-scene.js';
+import { HeadAsteroidsScene } from './head-asteroids-scene.js';
+import { HeadTracker } from './head-tracker.js';
 
 const app = {
     init() {
@@ -91,6 +94,40 @@ const app = {
         const defaultModel = ModelLoader.createDefaultModel();
         Scene3D.replaceModel(defaultModel);
         Utils.log('Modelo restaurado para padrão');
+    },
+
+    startSpaceExperience() {
+        Utils.log('Iniciando experiência espacial');
+        SpaceScene.start();
+    },
+
+    exitSpaceExperience() {
+        Utils.log('Saindo da experiência espacial');
+        SpaceScene.stop();
+    },
+
+    startHeadAsteroidsExperience() {
+        Utils.log('Iniciando head-tracking asteroids');
+        HeadAsteroidsScene.start();
+    },
+
+    exitHeadAsteroidsExperience() {
+        Utils.log('Saindo do head-tracking asteroids');
+        HeadAsteroidsScene.stop();
+    },
+
+    requestHeadCameraPermission() {
+        Utils.log('Solicitando permissão de câmera para head-tracking');
+        const statusEl = document.getElementById('status-bar');
+        HeadTracker.primeCamera()
+            .then(() => {
+                if (statusEl) statusEl.innerText = 'Status: Câmera pronta para head-tracking.';
+            })
+            .catch(err => {
+                Utils.log('Permissão de câmera negada ou erro', err);
+                alert('Não foi possível acessar a câmera. Verifique permissões.');
+                if (statusEl) statusEl.innerText = 'Status: Câmera não autorizada.';
+            });
     }
 };
 
