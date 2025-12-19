@@ -395,3 +395,182 @@ input:focus {
     font-size: 14px;
     margin: 0 0 16px 0;
 }
+
+.onboarding-progress {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 24px 20px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.progress-step span {
+    font-size: 11px;
+    color: rgba(245, 245, 247, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.3s;
+}
+
+.progress-step.active span,
+.progress-step.completed span {
+    color: rgba(245, 245, 247, 0.8);
+}
+
+.step-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(245, 245, 247, 0.2);
+    transition: all 0.3s;
+}
+
+.step-dot.active {
+    background: #f5f5f7;
+    box-shadow: 0 0 12px rgba(245, 245, 247, 0.4);
+}
+
+.step-dot.completed {
+    background: #4CAF50;
+}
+
+.progress-line {
+    width: 40px;
+    height: 2px;
+    background: rgba(245, 245, 247, 0.15);
+    margin-bottom: 20px;
+    transition: background 0.3s;
+}
+
+.progress-line.completed {
+    background: #4CAF50;
+}
+
+.onboarding-step {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 40px 24px;
+    max-width: 340px;
+    animation: fadeInUp 0.4s ease-out;
+}
+
+.onboarding-step.active {
+    display: flex;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.step-icon {
+    margin-bottom: 24px;
+    color: rgba(245, 245, 247, 0.6);
+}
+
+.success-icon {
+    margin-bottom: 24px;
+    animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.onboarding-step h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin: 0 0 12px 0;
+    color: #f5f5f7;
+}
+
+.step-description {
+    font-size: 15px;
+    color: rgba(245, 245, 247, 0.6);
+    line-height: 1.5;
+    margin: 0 0 24px 0;
+}
+
+.step-hint {
+    font-size: 13px;
+    color: rgba(245, 245, 247, 0.4);
+    margin: 16px 0 0 0;
+}
+
+.step-status {
+    font-size: 14px;
+    margin: 16px 0 0 0;
+    min-height: 20px;
+}
+
+.step-status.success {
+    color: #4CAF50;
+}
+
+.step-status.error {
+    color: #f44336;
+}
+
+.step-status.loading {
+    color: rgba(245, 245, 247, 0.6);
+}
+
+.btn-primary {
+    background: #0A84FF;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0070E0;
+}
+
+.btn-primary:disabled {
+    background: rgba(10, 132, 255, 0.4);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.calibration-status {
+    font-size: 14px;
+    color: rgba(245, 245, 247, 0.5);
+    margin: 8px 0 20px 0;
+    transition: color 0.3s;
+}
+
+.calibration-status.ready {
+    color: #4CAF50;
+}
+
+.phone-position-demo {
+    margin-bottom: 16px;
+}
+
+#mobile-controls {
+    position: relative;
+}

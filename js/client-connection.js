@@ -34,7 +34,7 @@ export const ClientConnection = {
         Utils.log('Conexão estabelecida com o PC!');
 
         const statusEl = document.getElementById('status-bar');
-        statusEl.innerText = 'Status: Conectado!';
+        if (statusEl) statusEl.style.display = 'none';
 
         document.getElementById('ui-layer').classList.add('hidden');
         document.getElementById('mobile-controls').style.display = 'flex';
