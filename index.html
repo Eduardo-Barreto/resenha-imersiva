@@ -80,15 +80,73 @@
     </div>
 
     <div id="mobile-controls">
-        <div class="phone-icon">
-            <div class="phone-screen" id="virtual-screen"></div>
+        <div class="onboarding-progress">
+            <div class="progress-step" data-step="1">
+                <div class="step-dot active"></div>
+                <span>Sensores</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step" data-step="2">
+                <div class="step-dot"></div>
+                <span>Calibrar</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step" data-step="3">
+                <div class="step-dot"></div>
+                <span>Pronto</span>
+            </div>
         </div>
-        <h2>Gire seu celular!</h2>
-        <p id="mobile-status">Aguardando sensores...</p>
-        <button class="btn" onclick="app.requestSensorPermission()">Ativar Sensores</button>
-        <div class="sensor-data" id="sensor-debug">X: 0 | Y: 0 | Z: 0</div>
-        <div class="sensor-data" style="color: #888; font-size: 12px; margin-top: 10px;">
-            Abra o console para ver logs detalhados
+
+        <div id="onboarding-step-1" class="onboarding-step active">
+            <div class="step-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/>
+                    <path d="M12 6v6l4 2"/>
+                </svg>
+            </div>
+            <h2>Ativar Sensores</h2>
+            <p class="step-description">Para controlar o modelo 3D, precisamos acessar os sensores de movimento do seu celular.</p>
+            <p class="step-hint" id="sensor-permission-hint">Toque no botão abaixo para autorizar</p>
+            <button class="btn btn-primary" id="btn-activate-sensors" onclick="app.requestSensorPermission()">
+                Autorizar Sensores
+            </button>
+            <p class="step-status" id="sensor-status"></p>
+        </div>
+
+        <div id="onboarding-step-2" class="onboarding-step">
+            <div class="phone-position-demo">
+                <svg width="80" height="100" viewBox="0 0 80 100" fill="none">
+                    <g transform="translate(40,48)">
+                        <g transform="scale(1, 0.4)">
+                            <rect x="-18" y="-52" width="36" height="104" rx="5" fill="rgba(245,245,247,0.08)" stroke="rgba(245,245,247,0.3)" stroke-width="1.5"/>
+                            <rect x="-14" y="-44" width="28" height="80" rx="2" fill="rgba(245,245,247,0.12)"/>
+                            <circle cx="0" cy="-48" r="2" fill="rgba(245,245,247,0.4)"/>
+                            <rect x="-6" y="42" width="12" height="2.5" rx="1" fill="rgba(245,245,247,0.25)"/>
+                        </g>
+                    </g>
+                    <text x="40" y="95" text-anchor="middle" fill="rgba(245,245,247,0.35)" font-size="8">carregador para você</text>
+                </svg>
+            </div>
+            <h2>Calibrar Posição</h2>
+            <p class="step-description">Coloque o celular deitado, perpendicular à tela do PC, com a tela para cima e o carregador voltado para você.</p>
+            <p class="calibration-status" id="calibration-indicator">Aguardando sensores...</p>
+            <button class="btn btn-calibrate" id="btn-calibrate" onclick="app.calibrateSensors()">
+                Calibrar Agora
+            </button>
+            <p class="step-hint">Mantenha parado ao calibrar</p>
+        </div>
+
+        <div id="onboarding-step-3" class="onboarding-step">
+            <div class="success-icon">
+                <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+            </div>
+            <h2>Tudo Pronto!</h2>
+            <p class="step-description">Gire seu celular para controlar o modelo 3D no computador.</p>
+            <div class="sensor-data" id="sensor-debug">X: 0 | Y: 0 | Z: 0</div>
+            <button class="btn btn-secondary btn-small" onclick="app.recalibrate()">Recalibrar</button>
         </div>
     </div>
 

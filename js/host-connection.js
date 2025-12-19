@@ -95,6 +95,8 @@ export const HostConnection = {
     },
 
     updateCubeRotation(data) {
+        const absolute = data.absolute;
+        console.log('absolute', absolute);
         const alpha = data.alpha * (Math.PI / 180);
         const beta = data.beta * (Math.PI / 180);
         const gamma = data.gamma * (Math.PI / 180);

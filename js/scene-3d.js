@@ -1,8 +1,9 @@
 import { AppState } from './state.js';
-import { OrientationMapper } from './orientation-mapper.js';
 import { ModelLoader } from './model-loader.js';
 
 export const Scene3D = {
+    screenOrientation: 0,
+
     init() {
         this.createScene();
         this.createLights();
@@ -12,6 +13,14 @@ export const Scene3D = {
         this.createPhoneModel();
         this.animate();
         this.setupResizeHandler();
+        this.setupOrientationListener();
+    },
+
+    setupOrientationListener() {
+        window.addEventListener('orientationchange', () => {
+            this.screenOrientation = window.orientation || 0;
+        });
+        this.screenOrientation = window.orientation || 0;
     },
 
     createScene() {
@@ -95,8 +104,19 @@ export const Scene3D = {
     },
 
     updateRotation(alpha, beta, gamma) {
-        const rotation = OrientationMapper.map(alpha, beta, gamma);
-        AppState.cube.rotation.order = rotation.order;
-        AppState.cube.rotation.set(rotation.x, rotation.y, rotation.z);
+        const euler = new THREE.Euler(beta, alpha, -gamma, 'YXZ');
+        
+        const quaternion = new THREE.Quaternion();
+        quaternion.setFromEuler(euler);
+        
+        const alignQuaternion = new THREE.Quaternion(-Math.sqrt(0.5), 0, 0, Math.sqrt(0.5));
+        quaternion.multiply(alignQuaternion);
+        
+        const orientAngle = -this.screenOrientation * (Math.PI / 180);
+        const screenQuaternion = new THREE.Quaternion();
+        screenQuaternion.setFromAxisAngle(new THREE.Vector3(0, 0, 1), orientAngle);
+        quaternion.multiply(screenQuaternion);
+        
+        AppState.cube.quaternion.copy(quaternion);
     }
 };

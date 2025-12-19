@@ -64,6 +64,14 @@ const app = {
         SensorManager.requestPermission();
     },
 
+    calibrateSensors() {
+        SensorManager.calibrate();
+    },
+
+    recalibrate() {
+        SensorManager.recalibrate();
+    },
+
     changeMappingMode() {
         AppState.currentMapping = document.getElementById('mapping-mode').value;
         Utils.log(`Modo de mapeamento alterado para: ${AppState.currentMapping}`);
