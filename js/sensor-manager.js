@@ -2,6 +2,8 @@ import { AppState } from './state.js';
 import { Utils } from './utils.js';
 
 export const SensorManager = {
+    lastRawOrientation: { alpha: 0, beta: 0, gamma: 0 },
+
     checkAndStart() {
         Utils.log('Verificando disponibilidade de sensores...');
 
@@ -75,6 +77,16 @@ export const SensorManager = {
             return;
         }
 
+        this.lastRawOrientation = {
+            alpha: event.alpha !== null ? event.alpha : 0,
+            beta: event.beta !== null ? event.beta : 0,
+            gamma: event.gamma !== null ? event.gamma : 0
+        };
+
+        if (!AppState.isCalibrated) {
+            return;
+        }
+
         const now = Date.now();
         if (now - AppState.lastSendTime < 33) return;
 
@@ -89,12 +101,40 @@ export const SensorManager = {
         AppState.lastSendTime = now;
     },
 
+    calibrate() {
+        AppState.calibrationOffset = {
+            alpha: this.lastRawOrientation.alpha - 90,
+            beta: this.lastRawOrientation.beta,
+            gamma: this.lastRawOrientation.gamma
+        };
+        AppState.isCalibrated = true;
+        Utils.log('✓ Calibração realizada!', AppState.calibrationOffset);
+        this.updateCalibrationUI();
+    },
+
+    updateCalibrationUI() {
+        const calibrationSection = document.getElementById('calibration-section');
+        const controlsSection = document.getElementById('controls-section');
+        const mobileStatus = document.getElementById('mobile-status');
+
+        if (calibrationSection) calibrationSection.style.display = 'none';
+        if (controlsSection) controlsSection.style.display = 'block';
+        if (mobileStatus) {
+            mobileStatus.innerText = '✓ Calibrado! Gire seu celular.';
+            mobileStatus.style.color = '#4CAF50';
+        }
+    },
+
     sendOrientationData(event) {
+        const rawAlpha = event.alpha !== null ? event.alpha : 0;
+        const rawBeta = event.beta !== null ? event.beta : 0;
+        const rawGamma = event.gamma !== null ? event.gamma : 0;
+
         const data = {
             type: 'orientation',
-            alpha: event.alpha !== null ? event.alpha : 0,
-            beta: event.beta !== null ? event.beta : 0,
-            gamma: event.gamma !== null ? event.gamma : 0
+            alpha: ((rawAlpha - AppState.calibrationOffset.alpha) + 360) % 360,
+            beta: rawBeta - AppState.calibrationOffset.beta,
+            gamma: rawGamma - AppState.calibrationOffset.gamma
         };
 
         AppState.connection.send(data);
@@ -114,8 +154,10 @@ export const SensorManager = {
         document.getElementById('sensor-debug').innerText =
             `X: ${data.beta.toFixed(0)} | Y: ${data.gamma.toFixed(0)} | Z: ${data.alpha.toFixed(0)}`;
 
-        const screen = document.getElementById('virtual-screen');
-        screen.style.transform = `rotate(${data.gamma}deg)`;
+        const screen = document.getElementById('virtual-screen-active');
+        if (screen) {
+            screen.style.transform = `rotate(${data.gamma}deg)`;
+        }
     },
 
     updateMobileStatus() {

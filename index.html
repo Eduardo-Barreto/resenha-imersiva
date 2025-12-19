@@ -80,15 +80,24 @@
     </div>
 
     <div id="mobile-controls">
-        <div class="phone-icon">
-            <div class="phone-screen" id="virtual-screen"></div>
+        <div id="calibration-section">
+            <div class="phone-icon phone-flat">
+                <div class="phone-screen" id="virtual-screen"></div>
+            </div>
+            <h2>Calibração</h2>
+            <p id="mobile-status">Segure o celular na horizontal<br>(tela voltada para cima na sua direção)</p>
+            <button class="btn" onclick="app.requestSensorPermission()">Ativar Sensores</button>
+            <button class="btn btn-calibrate" onclick="app.calibrateSensors()">🎯 Calibrar</button>
         </div>
-        <h2>Gire seu celular!</h2>
-        <p id="mobile-status">Aguardando sensores...</p>
-        <button class="btn" onclick="app.requestSensorPermission()">Ativar Sensores</button>
-        <div class="sensor-data" id="sensor-debug">X: 0 | Y: 0 | Z: 0</div>
-        <div class="sensor-data" style="color: #888; font-size: 12px; margin-top: 10px;">
-            Abra o console para ver logs detalhados
+
+        <div id="controls-section" style="display: none;">
+            <div class="phone-icon">
+                <div class="phone-screen" id="virtual-screen-active"></div>
+            </div>
+            <h2>Gire seu celular!</h2>
+            <p id="calibrated-status">✓ Calibrado!</p>
+            <button class="btn btn-secondary btn-small" onclick="app.calibrateSensors()">🎯 Recalibrar</button>
+            <div class="sensor-data" id="sensor-debug">X: 0 | Y: 0 | Z: 0</div>
         </div>
     </div>
 

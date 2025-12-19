@@ -12,5 +12,7 @@ export const AppState = {
     firstEventReceived: false,
     messageCount: 0,
     dataCount: 0,
-    lastSendTime: 0
+    lastSendTime: 0,
+    calibrationOffset: { alpha: 0, beta: 0, gamma: 0 },
+    isCalibrated: false
 };
